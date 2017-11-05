@@ -16,7 +16,7 @@ RUN stack build --system-ghc --copy-bins --local-bin-path /usr/local/bin
 
 FROM alpine
 
-RUN apk add --no-cache libpq gmp libffi
+RUN apk add --no-cache libpq gmp libffi ca-certificates
 
 COPY --from=0 /usr/local/bin/postgrest /usr/local/bin/postgrest
 
