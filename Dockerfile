@@ -1,10 +1,15 @@
-FROM alpine
+FROM debian:stretch-slim
 
-RUN apk add --no-cache curl ghc musl-dev zlib-dev linux-headers postgresql-dev gmp-dev
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    ghc \
+    libpq-dev \
+    libgmp-dev
 
 RUN curl -sSL https://get.haskellstack.org/ | sh
 
-ARG POSTGREST_VERSION="0.4.3.0"
+ARG POSTGREST_VERSION="5.1.0"
 
 RUN curl -SLo postgrest.tar.gz https://github.com/begriffs/postgrest/archive/v${POSTGREST_VERSION}.tar.gz && \
 	tar -xzvf postgrest.tar.gz
@@ -14,9 +19,12 @@ WORKDIR postgrest-${POSTGREST_VERSION}
 RUN stack build --system-ghc --copy-bins --local-bin-path /usr/local/bin
 
 
-FROM alpine
+FROM debian:stretch-slim
 
-RUN apk add --no-cache libpq gmp libffi ca-certificates
+RUN apt-get update && apt-get install -y \
+    libpq5 \
+    libgmp10 \
+    ca-certificates
 
 COPY --from=0 /usr/local/bin/postgrest /usr/local/bin/postgrest
 
