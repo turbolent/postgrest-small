@@ -1,2 +1,3 @@
-# postgrest-alpine
-PostgREST in an Alpine Docker image
+# postgrest-small
+
+A small PostgREST Docker image
